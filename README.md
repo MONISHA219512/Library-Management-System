@@ -1,2 +1,3 @@
 # Library-Management-System
 This is my first project on github
+The Library Management System is a desktop-based application developed in Java using the AWT (Abstract Window Toolkit). It is designed to simplify the process of managing library books by providing an intuitive and user-friendly graphical interface. The system allows users to perform essential operations such as adding books, viewing the list of all available books, and searching for specific books by their title, author, or ISBN. The application also features a visually engaging interface with a book-themed background, enhancing the overall user experience.
