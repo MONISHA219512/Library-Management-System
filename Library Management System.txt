@@ -1,0 +1,170 @@
+import java.awt.*;
+import java.awt.event.*;
+import java.util.ArrayList;
+
+// Book class to store book details
+class Book {
+    private String title;
+    private String author;
+    private String isbn;
+
+    public Book(String title, String author, String isbn) {
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    @Override
+    public String toString() {
+        return "Title: " + title + ", Author: " + author + ", ISBN: " + isbn;
+    }
+}
+
+// LibraryManagementSystem class with AWT GUI
+public class LibraryManagementSystem extends Frame implements ActionListener {
+    private ArrayList<Book> books = new ArrayList<>();
+    private TextField titleField, authorField, isbnField, searchField;
+    private TextArea outputArea;
+
+    public LibraryManagementSystem() {
+        // Frame settings
+        setTitle("Library Management System");
+        setSize(500, 600);
+        setLayout(new FlowLayout());
+        setVisible(true);
+
+        // Add components to GUI
+        add(new Label("Title:"));
+        titleField = new TextField(30);
+        add(titleField);
+
+        add(new Label("Author:"));
+        authorField = new TextField(30);
+        add(authorField);
+
+        add(new Label("ISBN:"));
+        isbnField = new TextField(20);
+        add(isbnField);
+
+        Button addButton = new Button("Add Book");
+        addButton.addActionListener(this);
+        add(addButton);
+
+        Button viewButton = new Button("View All Books");
+        viewButton.addActionListener(this);
+        add(viewButton);
+
+        add(new Label("Search (Title/Author/ISBN):"));
+        searchField = new TextField(30);
+        add(searchField);
+
+        Button searchButton = new Button("Search Book");
+        searchButton.addActionListener(this);
+        add(searchButton);
+
+        Button clearButton = new Button("Clear Output");
+        clearButton.addActionListener(this);
+        add(clearButton);
+
+        Button exitButton = new Button("Exit");
+        exitButton.addActionListener(this);
+        add(exitButton);
+
+        outputArea = new TextArea(20, 50);
+        outputArea.setEditable(false);
+        add(outputArea);
+
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent we) {
+                dispose();
+            }
+        });
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String command = e.getActionCommand();
+
+        switch (command) {
+            case "Add Book":
+                addBook();
+                break;
+            case "View All Books":
+                viewAllBooks();
+                break;
+            case "Search Book":
+                searchBook();
+                break;
+            case "Clear Output":
+                outputArea.setText("");
+                break;
+            case "Exit":
+                dispose();
+                break;
+        }
+    }
+
+    private void addBook() {
+        String title = titleField.getText();
+        String author = authorField.getText();
+        String isbn = isbnField.getText();
+
+        if (!title.isEmpty() && !author.isEmpty() && !isbn.isEmpty()) {
+            books.add(new Book(title, author, isbn));
+            outputArea.append("Book added successfully: " + title + "\n");
+            titleField.setText("");
+            authorField.setText("");
+            isbnField.setText("");
+        } else {
+            outputArea.append("Error: Please fill all fields before adding a book.\n");
+        }
+    }
+
+    private void viewAllBooks() {
+        if (books.isEmpty()) {
+            outputArea.append("No books available in the library.\n");
+        } else {
+            outputArea.append("List of Books:\n");
+            for (Book book : books) {
+                outputArea.append(book.toString() + "\n");
+            }
+        }
+    }
+
+    private void searchBook() {
+        String query = searchField.getText().toLowerCase();
+        boolean found = false;
+
+        if (!query.isEmpty()) {
+            for (Book book : books) {
+                if (book.getTitle().toLowerCase().contains(query) ||
+                    book.getAuthor().toLowerCase().contains(query) ||
+                    book.getIsbn().toLowerCase().contains(query)) {
+                    outputArea.append("Found: " + book.toString() + "\n");
+                    found = true;
+                }
+            }
+            if (!found) {
+                outputArea.append("No book found matching the query: " + query + "\n");
+            }
+        } else {
+            outputArea.append("Error: Please enter a search query.\n");
+        }
+    }
+
+    public static void main(String[] args) {
+        new LibraryManagementSystem();
+    }
+}
